@@ -22,6 +22,8 @@ class ArmyBots:
             'Поставить лайк на коментарий',
             'Отправить комплименты',
             'Отправить оскорбления (фем)',
+            'Написать комплименты в коментарии',
+            'Написать оскорбления в коментарии (фем)',
         ]
 
         with open('compliment_to_girl.txt', 'r', encoding='UTF-8') as f:
@@ -66,7 +68,7 @@ class ArmyBots:
 
         return message
 
-    def sendMessages(self, id_user: int, message: str):
+    def sendMessages(self, id_user, message):
         for token in self.tokens:
             try:
                 vk = vk_api.VkApi(token=token).get_api()
@@ -74,7 +76,7 @@ class ArmyBots:
             except:
                 print(token)
 
-    def likePost(self, id_user: int, id_item: int):
+    def likePost(self, id_user, id_item):
         for token in self.tokens:
             try:
                 vk = vk_api.VkApi(token=token).get_api()
@@ -82,7 +84,7 @@ class ArmyBots:
             except:
                 print(token)
 
-    def likePhoto(self, id_user: int, id_item: int):
+    def likePhoto(self, id_user, id_item):
         for token in self.tokens:
             try:
                 vk = vk_api.VkApi(token=token).get_api()
@@ -90,7 +92,7 @@ class ArmyBots:
             except:
                 print(token)
 
-    def likeComment(self, id_user: int, id_item: int):
+    def likeComment(self, id_user, id_item):
         for token in self.tokens:
             try:
                 vk = vk_api.VkApi(token=token).get_api()
@@ -106,7 +108,7 @@ class ArmyBots:
             except:
                 print(token)
 
-    def sendinsult(self, id_user):
+    def sendInsult(self, id_user):
         for token in self.tokens:
             try:
                 vk = vk_api.VkApi(token=token).get_api()
@@ -123,13 +125,28 @@ class ArmyBots:
                 except:
                     print('Капча')
 
+    def createCommentComplimentToGirl(self, owner_id, post_id):
+        for token in self.tokens:
+            try:
+                vk = vk_api.VkApi(token=token).get_api()
+                vk.wall.createComment(owner_id=owner_id, post_id=post_id, message=choice(self.complimentToGirl))
+            except:
+                print(token)
+
+    def createCommentInsultToMen(self, owner_id, post_id):
+        for token in self.tokens:
+            try:
+                vk = vk_api.VkApi(token=token).get_api()
+                vk.wall.createComment(owner_id=owner_id, post_id=post_id, message=choice(self.insultToMen))
+            except:
+                print(token)
+
 
     def gui(self):
         while True:
-            self._clearTerminal()
             for i in range(len(self._action)):
                 print(i, self._action[i], sep=' - ')
-            x = input('Выберите действие')
+            x = input('Выберите действие: ')
             if x == '0':
                 id_user = input('Введите id аользователя: ')
                 message = input('Введите текст сообщения: ')
@@ -141,7 +158,7 @@ class ArmyBots:
             elif x == '2':
                 id_user = input('Введите id пользователя/группы: ')
                 id_item = input('Введите id элемента: ')
-                self.likePhoto(id_user, id_item)
+                self.likePost(id_user, id_item)
             elif x == '3':
                 id_user = input('Введите id пользователя/группы: ')
                 id_item = input('Введите id элемента: ')
@@ -151,9 +168,18 @@ class ArmyBots:
                 self.sendCompliment(id_user)
             elif x == '5':
                 id_user = input('Введите id аользователя: ')
-                self.sendinsult(id_user)
+                self.sendInsult(id_user)
             elif x == '6':
+                id_user = input('Введите id пользователя/группы: ')
+                id_item = input('Введите id записи: ')
+                self.createCommentComplimentToGirl(id_user, id_item)
+            elif x == '7':
+                id_user = input('Введите id пользователя/группы: ')
+                id_item = input('Введите id записи: ')
+                self.createCommentInsultToMen(id_user, id_item)
+            elif x == '999':
                 id_user = input('Введите id аользователя: ')
                 self.sendALotOfCompliments(id_user)
             else:
+                self._clearTerminal()
                 print('Введена неверная команда!')
