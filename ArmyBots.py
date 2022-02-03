@@ -26,17 +26,8 @@ class ArmyBots:
             'Написать оскорбления в коментарии записи (фем)',
             'Написать комплименты в коментарии фотографии',
             'Написать оскорбления в коментарии фотографии (фем)',
-            'Написать определенные коментарии',
-            'Вступить в группу',
         ]
-
-        self._actionSetting = [
-            'Добавить аккаунт через токен',
-            'Добавить аккаунт через логин пароль',
-            'Удалить аккаунт через токен',
-            'Удалить аккаунт через ID',
-        ]
-
+        self._actionSetting = []
         with open('compliment_to_girl.txt', 'r', encoding='UTF-8') as f:
             while True:
                 line = f.readline()
@@ -168,32 +159,12 @@ class ArmyBots:
             except:
                 print(token)
 
-    def createComment(self, owner_id, post_id, message):
-        for token in self.tokens:
-            try:
-                vk = vk_api.VkApi(token=token).get_api()
-                vk.wall.createComment(owner_id=owner_id, post_id=post_id, message=message)
-            except:
-                print(token)
-
-    def groupsJoin(self, group_id):
-        for token in self.tokens:
-            try:
-                vk = vk_api.VkApi(token=token).get_api()
-                vk.groups.join(group_id=group_id)
-            except:
-                print(token)
 
     def gui(self):
         while True:
             for i in range(len(self._action)):
                 print(i, self._action[i], sep=' - ')
             x = input('Выберите действие: ')
-            if x == '0':
-                self._clearTerminal()
-                for i in range(len(self._actionSetting)):
-                    print(i, self._actionSetting[i], sep=' - ')
-                id_user = input('Потом сделаю настройки: ')
             if x == '1':
                 id_user = input('Введите id аользователя: ')
                 message = input('Введите текст сообщения: ')
@@ -232,14 +203,6 @@ class ArmyBots:
                 id_user = input('Введите id пользователя/группы: ')
                 id_item = input('Введите id фотографии: ')
                 self.createCommentInPhotoInsultToMen(id_user, id_item)
-            elif x == '11':
-                id_user = input('Введите id пользователя/группы: ')
-                id_item = input('Введите id фотографии: ')
-                message = input('Введите текст сообщения: ')
-                self.createComment(id_user, id_item, message)
-            elif x == '12':
-                group_id = input('Введите id группы: ')
-                self.groupsJoin(group_id)
             elif x == '999':
                 id_user = input('Введите id аользователя: ')
                 self.sendALotOfCompliments(id_user)
